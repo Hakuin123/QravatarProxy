@@ -1,5 +1,6 @@
 // QavatarProxy.js
 
+const CACHE_MAX_AGE = 604800; // 头像缓存时间（秒）
 const QQ_EMAIL_REGEX = /^([1-9][0-9]{4,11})@qq\.com$/i;
 
 async function sha256(message) {
@@ -23,7 +24,7 @@ async function proxyFetch(url) {
 			responseHeaders.set(k, v);
 		}
 	}
-	responseHeaders.set("Cache-Control", "public, max-age=3600");
+	responseHeaders.set("Cache-Control", `public, max-age=${CACHE_MAX_AGE}`);
 	responseHeaders.set("X-Proxied-By", "QavatarProxy");
 
 	return new Response(upstream.body, {
@@ -61,7 +62,7 @@ async function handleGetAvatar(hash, request, env) {
 				responseHeaders.set(k, v);
 			}
 		}
-		responseHeaders.set("Cache-Control", "public, max-age=3600");
+		responseHeaders.set("Cache-Control", `public, max-age=${CACHE_MAX_AGE}`);
 		responseHeaders.set("X-Proxied-By", "QavatarProxy");
 		return new Response(probeRes.body, {
 			status: probeRes.status,
@@ -77,7 +78,13 @@ async function handleGetAvatar(hash, request, env) {
 
 	if (env.DEFAULT_AVATAR_URL) {
 		// 第三步：KV 也未命中，检查是否配置了自定义默认头像
-		return Response.redirect(env.DEFAULT_AVATAR_URL, 302);
+		return new Response(null, {
+			status: 302,
+			headers: {
+				Location: env.DEFAULT_AVATAR_URL,
+				"Cache-Control": `public, max-age=${CACHE_MAX_AGE}`,
+			},
+		});
 	}
 	// 未配置则回退到 Gravatar 并附带 GRAVATAR_EXTRA_PARAMS
 	const fallbackParams = new URLSearchParams(new URL(request.url).searchParams);
