@@ -1,0 +1,20 @@
+name = "qavatar-proxy"
+main = "qavatar-proxy.js"
+compatibility_date = "2026-04-13"
+
+[[kv_namespaces]]
+binding = "QAVATAR"
+id = "YOUR_KV_NAMESPACE_ID"          # 替换为你的 KV Namespace ID
+
+[vars]
+# DEFAULT_AVATAR_URL
+# 定义默认头像 URL，配置后替代 Gravatar 默认头像
+DEFAULT_AVATAR_URL = ""
+
+# GRAVATAR_EXTRA_PARAMS
+# 追加到 Gravatar 请求的自定义参数，格式为 URL query string
+# 自定义参数优先级高于透传的同名参数，留空则不追加
+# 示例：GRAVATAR_EXTRA_PARAMS = "d=mp&r=g"
+GRAVATAR_EXTRA_PARAMS = ""
+
+# ADMIN_SECRET 建议通过 wrangler secret put ADMIN_SECRET 注入
