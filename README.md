@@ -24,6 +24,8 @@ GET /avatar/:hash
             └─ 未命中 ──→ 代理返回 Gravatar 默认头像 / 重定向至自定义默认头像
 ```
 
+当 `FALLBACK_ON_ERROR` 开启时，上述任何步骤返回 ≥ 400 的错误响应，均会被替换为 `DEFAULT_AVATAR_URL` 的 302 重定向，原始错误写入 `X-Error-Message` 响应头
+
 ## 部署
 
 ### 0. 初始化
@@ -122,6 +124,7 @@ curl -X POST https://your.domain/avatar/admin/add \
 | ----------------------- | ---------------------- | ------------------------------------------------------------ |
 | `ADMIN_SECRET`          | `wrangler secret put`  | 管理接口鉴权密钥                                             |
 | `DEFAULT_AVATAR_URL`    | `wrangler.toml [vars]` | 自定义默认头像 URL，配置后替代 Gravatar 默认头像             |
+| `FALLBACK_ON_ERROR`     | `wrangler.toml [vars]` | 开启后，所有 ≥ 400 的错误响应均重定向至 `DEFAULT_AVATAR_URL`，原始错误写入 `X-Error-Message` 响应头 |
 | `GRAVATAR_EXTRA_PARAMS` | `wrangler.toml [vars]` | 追加到 Gravatar fallback 请求的参数，格式为 URL query string |
 
 ## Cloudflare 免费套餐说明
