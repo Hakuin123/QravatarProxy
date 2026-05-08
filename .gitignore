@@ -1,5 +1,6 @@
-twikoo/
 node_modules/
 .wrangler/
+
+twikoo/
 wrangler.toml
 .env
