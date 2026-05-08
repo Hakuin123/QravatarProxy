@@ -127,6 +127,23 @@ curl -X POST https://your.domain/avatar/admin/add \
 | `FALLBACK_ON_ERROR`     | `wrangler.toml [vars]` | 开启后，所有 ≥ 400 的错误响应均重定向至 `DEFAULT_AVATAR_URL`，原始错误写入 `X-Error-Message` 响应头 |
 | `GRAVATAR_EXTRA_PARAMS` | `wrangler.toml [vars]` | 追加到 Gravatar fallback 请求的参数，格式为 URL query string |
 
+## 更新
+
+当有新版本发布时，可通过以下步骤更新：
+
+```bash
+# 1. 拉取最新代码
+git pull
+
+# 2. 检查 wrangler-example.toml 是否有新增配置项
+#    如有，将其同步到你的 wrangler.toml 中
+
+# 3. 重新部署
+wrangler deploy
+```
+
+> **注意：** 你的 `wrangler.toml` 包含本地配置（KV ID、环境变量等），不会被 `git pull` 覆盖。更新后请对照 `wrangler-example.toml` 检查是否有新增的配置项需要补充。
+
 ## Cloudflare 免费套餐说明
 
 KV 读取仅在 Gravatar 返回 404 时触发，对有 Gravatar 的用户**零 KV 消耗**，在[免费套餐限制](https://developers.cloudflare.com/kv/platform/limits/)（100,000 次 Reads/天）下可稳定运行。
