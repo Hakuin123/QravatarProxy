@@ -1,7 +1,8 @@
 {
 	"version": "1.1.1",
 	"scripts": {
-		"deploy": "wrangler deploy"
+		"deploy": "wrangler deploy",
+		"release": "npm version patch && git push && git push --tags"
 	},
 	"dependencies": {
 		"wrangler": "^4.81.1"
