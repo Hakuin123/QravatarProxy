@@ -1,6 +1,6 @@
 name = "qavatar-proxy"
 main = "qavatar-proxy.js"
-compatibility_date = "2026-04-13"
+compatibility_date = "2026-05-08"
 
 [[kv_namespaces]]
 binding = "QAVATAR"
