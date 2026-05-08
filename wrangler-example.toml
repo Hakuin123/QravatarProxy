@@ -11,6 +11,12 @@ id = "YOUR_KV_NAMESPACE_ID"          # 替换为你的 KV Namespace ID
 # 定义默认头像 URL，配置后替代 Gravatar 默认头像
 DEFAULT_AVATAR_URL = ""
 
+# FALLBACK_ON_ERROR
+# 开启后，GET /avatar/:hash 路由中任何 >= 400 的错误响应
+# 均会被替换为 DEFAULT_AVATAR_URL 的 302 重定向，
+# 原始错误信息写入 X-Error-Message 响应头
+FALLBACK_ON_ERROR = "true"
+
 # GRAVATAR_EXTRA_PARAMS
 # 追加到 Gravatar 请求的自定义参数，格式为 URL query string
 # 自定义参数优先级高于透传的同名参数，留空则不追加

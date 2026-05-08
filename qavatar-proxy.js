@@ -141,6 +141,19 @@ async function handleAdminAdd(request, env) {
 	}
 }
 
+// ── 错误兜底：将错误响应替换为 DEFAULT_AVATAR_URL 重定向 ─────────────────────
+function fallbackToDefaultAvatar(env, errorDetail) {
+	return new Response(null, {
+		status: 302,
+		headers: {
+			Location: env.DEFAULT_AVATAR_URL,
+			"Cache-Control": `public, max-age=${CACHE_MAX_AGE}`,
+			"X-Error-Message": errorDetail,
+			"X-Proxied-By": "QavatarProxy",
+		},
+	});
+}
+
 // ── 主入口 ───────────────────────────────────────────────────────────────────
 export default {
 	async fetch(request, env) {
@@ -149,7 +162,19 @@ export default {
 
 		if (method === "GET") {
 			const m = pathname.match(/^\/avatar\/([^/]+)$/);
-			if (m) return handleGetAvatar(m[1], request, env);
+			if (m) {
+				let response;
+				try {
+					response = await handleGetAvatar(m[1], request, env);
+				} catch (e) {
+					response = new Response(e.message || "Internal Error", { status: 500 });
+				}
+				if (env.FALLBACK_ON_ERROR && env.DEFAULT_AVATAR_URL && response.status >= 400) {
+					const errorMsg = await response.text().catch(() => "");
+					return fallbackToDefaultAvatar(env, errorMsg || `HTTP ${response.status}`);
+				}
+				return response;
+			}
 		}
 
 		if (method === "POST" && pathname === "/avatar/admin/add") {
