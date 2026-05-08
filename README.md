@@ -67,6 +67,8 @@ GRAVATAR_EXTRA_PARAMS = "d=mp&r=g"
 wrangler deploy
 ```
 
+也可使用 `npm run deploy`
+
 ### 4. 配置路由（复用已有域名）
 
 如需挂载到已有域名的子路径（域名须托管于 Cloudflare）：
@@ -139,7 +141,7 @@ git pull
 #    如有，将其同步到你的 wrangler.toml 中
 
 # 3. 重新部署
-wrangler deploy
+npm run deploy
 ```
 
 > **注意：** 你的 `wrangler.toml` 包含本地配置（KV ID、环境变量等），不会被 `git pull` 覆盖。更新后请对照 `wrangler-example.toml` 检查是否有新增的配置项需要补充。
